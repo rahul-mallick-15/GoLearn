@@ -4,7 +4,8 @@ import "fmt"
 
 func main() {
 	// printBasicDataTypes()
-	arrayOfData()
+	// arrayOfData()
+	iterateArray()
 }
 
 func printBasicDataTypes() {
@@ -38,4 +39,22 @@ func arrayOfData() {
 	fmt.Printf("rune[%d] = %d, rune[%d] = %d\n", 0, charArray3[0], 1, charArray3[1])
 	fmt.Printf("rune = %s\n", charArray3)
 	fmt.Printf("rune = %s", string(charArray3))
+}
+
+func iterateArray() {
+	maxLen := 5
+
+	var charArray1 []rune = make([]rune, 0, maxLen)
+	for i := 0; i < maxLen; i++ {
+		charArray1 = append(charArray1, rune(i+97))
+		fmt.Printf("rune[%d] = %c\n", i, charArray1[i])
+	}
+
+	charArray2 := []rune{'9', 'a', '*'}
+
+	fmt.Println()
+	for i, char := range charArray2 {
+		fmt.Printf("rune[%d] = %c, %d\n", i, char, char)
+	}
+
 }
