@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	person "golearn/Person"
 	"os"
 	"os/exec"
 	"runtime"
@@ -12,8 +13,9 @@ func main() {
 	// printBasicDataTypes()
 	// arrayOfData()
 	// iterateArray()
-	userInput()
+	// userInput()
 	// menu()
+	person.PersonExample()
 }
 
 func printBasicDataTypes() {
