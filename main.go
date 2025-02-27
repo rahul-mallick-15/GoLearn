@@ -7,15 +7,59 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
+	"unicode/utf8"
 )
 
 func main() {
+	clearScreen()
 	// printBasicDataTypes()
 	// arrayOfData()
 	// iterateArray()
 	// userInput()
 	// menu()
+	// structPerson()
+	someStringFunctions()
+}
+
+func someStringFunctions() {
+	str := "a random stRing ǳ 😶"
+	fmt.Printf("Type: %T, size: %d, runeCount: %d", str, len(str), utf8.RuneCountInString(str))
+	fmt.Printf("\nString: %s", str)
+
+	fmt.Printf("\nuppercase: %s", strings.ToUpper(str))
+	fmt.Printf("\nlowercase: %s", strings.ToLower(str))
+	fmt.Printf("\ntotitle: %s", strings.ToTitle(str))
+
+	newString := strings.Map(func(r rune) rune {
+		fmt.Printf("\nRune '%c' uses %d bytes", r, utf8.RuneLen(r))
+		return 'ʬ'
+	}, str)
+	fmt.Printf("\nModified String: %s", newString)
+
+	for _, r := range newString {
+		fmt.Printf("\n%c, %c", r, newString[0])
+		fmt.Print("\n", []byte(string(r)), []byte(string(newString[0])))
+		fmt.Printf("\n []byte(string[rune]) = %v, []byte(string[byte]) = %v", []byte(string(r)), []byte(string(newString[0])))
+		bytes := []byte(string(r))
+		fmt.Printf("\nr = %c, bytes = %d\n", r, len(bytes))
+		for _, b := range bytes {
+			fmt.Printf("%08b ", b)
+		}
+		fmt.Println()
+
+		for _, b := range []byte(string(newString[0])) {
+			fmt.Printf("%08b ", b)
+		}
+		fmt.Println()
+		break
+	}
+}
+
+func structPerson() {
 	person.PersonExample()
+	// go build -gcflags="-m" main.go
+	fmt.Printf("%T\n", (&person.Person{}).Languages)
 }
 
 func printBasicDataTypes() {
