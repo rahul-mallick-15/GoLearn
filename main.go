@@ -4,9 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	person "golearn/Person"
+	"log"
+	"math"
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 )
@@ -19,7 +22,31 @@ func main() {
 	// userInput()
 	// menu()
 	// structPerson()
-	someStringFunctions()
+	// someStringFunctions()
+	binaryRepresentation()
+}
+
+func binaryRepresentation() {
+	scanner := bufio.NewScanner(os.Stdin)
+
+	if !scanner.Scan() {
+		if err := scanner.Err(); err != nil {
+			log.Fatal("Error reading input:", err)
+		}
+		log.Fatal("No input provided")
+		return
+	}
+
+	str := scanner.Text()
+	num, err := strconv.Atoi(str)
+	if err != nil {
+		log.Fatal("Invalid number\nerror:", err)
+	}
+
+	fmt.Printf("MinInt = %d, MaxInt = %d\n", math.MinInt, math.MaxInt)
+	fmt.Printf("MinInt8 = %d, MaxInt8 = %d\n", math.MinInt8, math.MaxInt8)
+	fmt.Printf("Binary: %b\n", num)
+	fmt.Printf("Binary (8-bit): %08b\n", num)
 }
 
 func someStringFunctions() {
