@@ -6,12 +6,16 @@ import (
 	person "golearn/Person"
 	"log"
 	"math"
+	"math/rand"
 	"os"
 	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
+
+	"golang.org/x/exp/constraints"
 )
 
 func main() {
@@ -23,10 +27,42 @@ func main() {
 	// menu()
 	// structPerson()
 	// someStringFunctions()
-	binaryRepresentation()
+	// binaryRepresentation()
+	printStyle()
 }
 
-func binaryRepresentation() {
+func printStyle() {
+	if rand.Intn(2) == 1 {
+		fmt.Printf("Enter a value: ")
+		str := readInputFromConsole()
+		printValue(str)
+	} else {
+		printValue('🔥')
+	}
+}
+
+func printValue[T constraints.Ordered](value T) {
+	for i := 0; i < 5; i++ {
+		clearScreen()
+		for j := i; j > 0; j-- {
+			fmt.Println()
+		}
+		for j := i; j > 0; j-- {
+			fmt.Printf("\t")
+		}
+
+		switch v := any(value).(type) {
+		case rune:
+			fmt.Printf("%c\n", v)
+		default:
+			fmt.Println(v)
+		}
+
+		time.Sleep(time.Second * 1)
+	}
+}
+
+func readInputFromConsole() string {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	if !scanner.Scan() {
@@ -34,10 +70,13 @@ func binaryRepresentation() {
 			log.Fatal("Error reading input:", err)
 		}
 		log.Fatal("No input provided")
-		return
 	}
+	return scanner.Text()
+}
 
-	str := scanner.Text()
+func binaryRepresentation() {
+
+	str := readInputFromConsole()
 	num, err := strconv.Atoi(str)
 	if err != nil {
 		log.Fatal("Invalid number\nerror:", err)
