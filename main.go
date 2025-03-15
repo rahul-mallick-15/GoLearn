@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -28,7 +29,40 @@ func main() {
 	// structPerson()
 	// someStringFunctions()
 	// binaryRepresentation()
-	printStyle()
+	// printStyle()
+	goRoutines()
+}
+
+func goRoutines() {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	logger := make(chan string, 6)
+
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go func(value int) {
+			defer wg.Done()
+			if rand.Intn(2) == 1 {
+				logger <- fmt.Sprintf("goRoutine (%d) mu locked", value)
+				mu.Lock()
+				defer mu.Unlock()
+			}
+			if value&1 == 1 {
+				printValue('🏴')
+			} else {
+				printValue('🏳')
+			}
+			logger <- fmt.Sprintf("goRoutine (%d) completed", value)
+		}(i)
+	}
+
+	wg.Wait()
+	fmt.Println("Closing logger channel...")
+	close(logger)
+
+	for log := range logger {
+		fmt.Println(log)
+	}
 }
 
 func printStyle() {
