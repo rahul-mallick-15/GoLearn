@@ -30,7 +30,15 @@ func main() {
 	// someStringFunctions()
 	// binaryRepresentation()
 	// printStyle()
-	goRoutines()
+	// goRoutines()
+	mixedTypeSet()
+}
+
+func mixedTypeSet() {
+	set := map[any]struct{}{5: {}, "value": {}, 3.14: {}}
+	for element := range set {
+		fmt.Printf("element: %v,\t type: %T\n", element, element)
+	}
 }
 
 func goRoutines() {
