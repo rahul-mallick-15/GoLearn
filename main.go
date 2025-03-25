@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	assignment "golearn/Assignment"
 	person "golearn/Person"
 	"log"
 	"math"
@@ -31,7 +32,8 @@ func main() {
 	// binaryRepresentation()
 	// printStyle()
 	// goRoutines()
-	mixedTypeSet()
+	// mixedTypeSet()
+	assignment.Task()
 }
 
 func mixedTypeSet() {
