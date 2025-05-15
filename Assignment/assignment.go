@@ -2,6 +2,7 @@ package Assignment
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -20,10 +21,14 @@ List All Contacts: Print all saved contacts in a readable format.
 Exit the Program: Provide an option to exit the program.
 */
 
-var contacts map[string]string
+var contacts map[string]*Contact
 
 func Task() {
-	contacts = make(map[string]string)
+	var err error
+	if contacts, err = LoadContactsFromJSON(); err != nil {
+		fmt.Printf("%v", err)
+		return
+	}
 	for {
 		fmt.Printf("1.Search\t2.Add\t3.Delete\t4.List\t5.Exit\n")
 		fmt.Printf("Enter choice: ")
@@ -48,6 +53,26 @@ func Task() {
 	}
 }
 
+func LoadContactsFromJSON() (map[string]*Contact, error) {
+
+	file, err := os.ReadFile("Assignment/data/contacts.json")
+	if err != nil {
+		return nil, fmt.Errorf("error reading file: %v", err)
+	}
+
+	var contactList []Contact
+	if err := json.Unmarshal(file, &contactList); err != nil {
+		return nil, fmt.Errorf("error unmarshaling JSON: %v", err)
+	}
+
+	contacts := make(map[string]*Contact)
+	for i := range contactList {
+		contacts[contactList[i].Name] = &contactList[i]
+	}
+
+	return contacts, nil
+}
+
 func searchContact() {
 	if len(contacts) == 0 {
 		fmt.Printf("No contacts to search\n")
@@ -55,11 +80,12 @@ func searchContact() {
 	}
 	fmt.Printf("Enter contact name: ")
 	name := takeNameInput()
-	if _, exists := contacts[name]; !exists {
+	if contact, exists := contacts[name]; !exists {
 		fmt.Printf("No contacts found with name='%s'\n", name)
-		return
+	} else {
+		fmt.Printf("Found contact {name: '%s', number:'%s'}\n", contact.Name, contact.Number)
 	}
-	fmt.Printf("Found contact {name: '%s', number:'%s'}\n", name, contacts[name])
+
 }
 
 func addNewContact() {
@@ -67,7 +93,7 @@ func addNewContact() {
 	name := takeNameInput()
 	fmt.Printf("Enter contact number: ")
 	number := takeNumberInput()
-	contacts[name] = number
+	contacts[name] = &Contact{name, number}
 	fmt.Printf("Added new contact {name: '%s', number: '%s'}\n", name, number)
 }
 
@@ -87,14 +113,14 @@ func deleteContact() {
 }
 
 func listAllContacts() {
-	i := 0
 	if len(contacts) == 0 {
 		fmt.Printf("Contacts list is empty\n")
 		return
 	}
-	for name, number := range contacts {
+	i := 0
+	for _, contact := range contacts {
 		i += 1
-		fmt.Printf("[%d] name=%s\tnumber=%s\n", i, name, number)
+		fmt.Printf("[%d] name=%s\tnumber=%s\n", i, contact.Name, contact.Number)
 	}
 }
 

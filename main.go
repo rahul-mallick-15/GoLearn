@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	cabBookingSystem "golearn/CabBookingSystem"
+	assignment "golearn/Assignment"
 	person "golearn/Person"
 	"log"
 	"math"
@@ -33,8 +33,8 @@ func main() {
 	// printStyle()
 	// goRoutines()
 	// mixedTypeSet()
-	// assignment.Task()
-	cabBookingSystem.Example()
+	assignment.Task()
+	// cabBookingSystem.Example()
 }
 
 func mixedTypeSet() {
